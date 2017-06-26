@@ -1,0 +1,34 @@
+<h1> Hi <%= @user.name %> </h1>
+
+<form action = "/posts" method = "post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="text" name = "post[content]" placeholder="Post something witty here...">
+	<input type="submit" value = "Idea!">
+</form>
+
+<% @posts.all.each do |post| %>
+	<h2><a href="/users/<%= post.user.id %>" method = "get"><%= post.user.alias %></a> says: </h2><h1><%= post.content %></h1>
+	<% if post.user == current_user %>
+		<form action = "/posts/<%= post.id %>" method = "post">
+		    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+			<input type="hidden" name="_method" value="delete">
+			<input type = 'submit' value = "x">
+		</form>	
+	<% end %>
+	<% unless post.users.include?(current_user) %>
+		<form action = "/likes" method = "post">
+		    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+		    <input type="hidden" name="like[post_id]" value = "<%= post.id %>">
+			<input type="submit" name="Like" value = "Like">			
+		</form>	
+	<% else %>
+		<form action = "/likes/<%= Like.where(user: current_user, post: post).first.id%>" method = "post">
+		    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+			<input type="hidden" name="_method" value="delete">
+			<input type="submit" name="Unlike" value = "Unlike">
+		</form>
+
+	<% end %>
+<h2><a href="/posts/<%= post.id %>"><%= post.likes.count %></a> people likes this </h2>
+<% end %>
+

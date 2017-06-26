@@ -1,0 +1,19 @@
+<a href="/posts">Bright Ideas</a>
+
+<h2><%= @post.user.alias %> says: </h2><p> <%= @post.content %></p>
+
+<h2>People whoe liked this post:</h2>
+
+<table>
+	<tr>
+		<th>Alisas</th>
+		<th>Name</th>
+	</tr>
+	<% @likes.all.each do |like| %>
+	<tr>
+		<td><a href="/users/<%= like.user.id %>" method="get"><%= like.user.alias %></a></td>
+		<td><%= like.user.name %></td>
+	</tr>
+	<% end %>
+</table>
+
