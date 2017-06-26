@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :posts_liked, through: :likes, source: :post
   validates :name, :alias, presence: true
   validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: EMAIL_REGEX }
+  validates_length_of :password, :minimum => 8
   
   before_save :email_lowercase
 
